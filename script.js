@@ -1,109 +1,52 @@
-// ================================
-// SMOOTH SCROLL
-// ================================
+// Pesan saat website dibuka
+window.addEventListener("load", function () {
+    console.log("Portfolio Safitri berhasil dibuka!");
+});
 
-document.querySelectorAll(".nav-menu a").forEach(link => {
 
-    link.addEventListener("click", function(event) {
+// Efek tombol menu
+const menuLinks = document.querySelectorAll(".menu a");
 
-        event.preventDefault();
+menuLinks.forEach(function(link) {
 
-        const target = document.querySelector(
-            this.getAttribute("href")
-        );
+    link.addEventListener("click", function() {
 
-        target.scrollIntoView({
-            behavior: "smooth"
+        menuLinks.forEach(function(item) {
+            item.classList.remove("active");
         });
+
+        this.classList.add("active");
 
     });
 
 });
 
 
-// ================================
-// ACTIVE NAVIGATION
-// ================================
+// Animasi sederhana saat card muncul
+const cards = document.querySelectorAll(".card");
 
-const sections = document.querySelectorAll("section");
-const navLinks = document.querySelectorAll(".nav-menu a");
+const observer = new IntersectionObserver(function(entries) {
 
-window.addEventListener("scroll", () => {
+    entries.forEach(function(entry) {
 
-    let currentSection = "";
-
-    sections.forEach(section => {
-
-        const sectionTop = section.offsetTop - 150;
-
-        if (window.scrollY >= sectionTop) {
-            currentSection = section.getAttribute("id");
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
         }
 
     });
 
-    navLinks.forEach(link => {
-
-        link.classList.remove("active");
-
-        if (
-            link.getAttribute("href") ===
-            "#" + currentSection
-        ) {
-            link.classList.add("active");
-        }
-
-    });
-
+}, {
+    threshold: 0.1
 });
 
 
-// ================================
-// SCROLL ANIMATION
-// ================================
+cards.forEach(function(card) {
 
-const animatedElements = document.querySelectorAll(
-    ".section-heading, .about-text, .about-info, .skill-card, .timeline-item, .experience-card, .project-card, .contact-container"
-);
+    card.style.opacity = "0";
+    card.style.transform = "translateY(30px)";
+    card.style.transition = "0.6s";
 
-const observer = new IntersectionObserver(
-    entries => {
-
-        entries.forEach(entry => {
-
-            if (entry.isIntersecting) {
-
-                entry.target.classList.add("show");
-
-            }
-
-        });
-
-    },
-    {
-        threshold: 0.15
-    }
-);
-
-
-animatedElements.forEach(element => {
-
-    element.classList.add("hidden");
-
-    observer.observe(element);
+    observer.observe(card);
 
 });
-
-
-// ================================
-// CURRENT YEAR
-// ================================
-
-const footerYear = document.querySelector("footer p");
-
-if (footerYear) {
-
-    footerYear.innerHTML =
-        `© ${new Date().getFullYear()} Safitri`;
-
-}
